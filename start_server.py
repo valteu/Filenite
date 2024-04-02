@@ -13,43 +13,25 @@ def run_command(command, cwd=None):
             break
         if output:
             print(output.strip().decode())
-
-def install_frontend_dependencies():
-    """
-    Install frontend JavaScript dependencies using npm.
-    """
-    os.chdir(os.path.join(os.getcwd(), "client"))
-
-    print("Installing frontend dependencies using npm...")
-    run_command('npm install')
-    
-    os.chdir("..")
-
-def install_backend_dependencies():
-    """
-    Set up a Python virtual environment and install backend dependencies.
-    """
+            
+def start_server():
     os.chdir('./server')
 
     if not os.path.exists('venv'):
-        print("Setting up Python virtual environment...")
-        run_command('python3 -m venv venv')
+        print("Missing venv")
+        exit(1)
 
     print("Activating the virtual environment and installing backend dependencies...")
     if sys.platform == "win32":
         # Windows requires a different command to activate the virtual environment
-        run_command('.\\venv\\Scripts\\activate && pip install -r requirements.txt')
+        run_command('.\\venv\\Scripts\\activate')
     else:
         # Linux and macOS use this command
-        run_command('. venv/bin/activate && pip install -r requirements.txt')
+        run_command('. venv/bin/activate')
 
-    print("Dependencies installed successfully.")
+    run_command("uvicorn main:app")
     
     os.chdir("..")
 
-def main():
-    install_frontend_dependencies()
-    install_backend_dependencies()
-
 if __name__ == "__main__":
-    main()
+    start_server()
