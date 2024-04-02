@@ -1,7 +1,6 @@
 from start_server import start_server
 from start_client import start_client
 import threading
-import os
 
 if __name__ == "__main__":
     server_thread = threading.Thread(target=start_server)
