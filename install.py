@@ -19,7 +19,7 @@ def install_frontend_dependencies():
     Install frontend JavaScript dependencies using npm.
     """
     print("Navigating to the frontend directory...")
-    os.chdir('/client')
+    os.chdir('./client')
 
     print("Installing frontend dependencies using npm...")
     run_command('npm install')
@@ -29,7 +29,7 @@ def install_backend_dependencies():
     Set up a Python virtual environment and install backend dependencies.
     """
     print("Navigating to the backend directory...")
-    os.chdir('/server')
+    os.chdir('./server')
 
     if not os.path.exists('venv'):
         print("Setting up Python virtual environment...")
