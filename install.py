@@ -19,10 +19,13 @@ def install_frontend_dependencies():
     Install frontend JavaScript dependencies using npm.
     """
     print("Navigating to the frontend directory...")
-    os.chdir('./client')
+    
+    os.chdir(os.path.join(os.getcwd(), "client"))
 
     print("Installing frontend dependencies using npm...")
     run_command('npm install')
+    
+    os.chdir("..")
 
 def install_backend_dependencies():
     """
@@ -44,6 +47,8 @@ def install_backend_dependencies():
         run_command('source venv/bin/activate && pip install -r requirements.txt')
 
     print("Dependencies installed successfully.")
+    
+    os.chdir("..")
 
 def main():
     install_frontend_dependencies()
