@@ -44,7 +44,7 @@ def install_backend_dependencies():
         run_command('.\\venv\\Scripts\\activate && pip install -r requirements.txt')
     else:
         # Linux and macOS use this command
-        run_command('source venv/bin/activate && pip install -r requirements.txt')
+        run_command('. venv/bin/activate && pip install -r requirements.txt')
 
     print("Dependencies installed successfully.")
     
