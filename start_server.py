@@ -14,24 +14,19 @@ def run_command(command, cwd=None):
         if output:
             print(output.strip().decode())
             
-def start_server():
-    os.chdir('./server')
+def start_server(path=os.path.join(os.getcwd(), "server")):
 
-    if not os.path.exists('venv'):
+    if not os.path.exists(os.path.join(path, 'venv')):
         print("Missing venv")
         exit(1)
 
-    print("Activating the virtual environment and installing backend dependencies...")
+    print("Activating the virtual environment")
     if sys.platform == "win32":
         # Windows requires a different command to activate the virtual environment
-        run_command('.\\venv\\Scripts\\activate')
+        run_command(f'cd {path} && .\\venv\\Scripts\\activate && uvicorn main:app')
     else:
         # Linux and macOS use this command
-        run_command('. venv/bin/activate')
-
-    run_command("uvicorn main:app")
-    
-    os.chdir("..")
+        run_command(f'cd {path} && . venv/bin/activate && uvicorn main:app')
 
 if __name__ == "__main__":
     start_server()

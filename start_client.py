@@ -14,12 +14,8 @@ def run_command(command, cwd=None):
         if output:
             print(output.strip().decode())
             
-def start_client():
-    os.chdir(os.path.join(os.getcwd(), "client"))
-    
-    run_command('npm start')
-    
-    os.chdir("..")
+def start_client(path=os.path.join(os.getcwd(), "client")):
+    run_command(f'cd {path} && npm start')
 
 if __name__ == "__main__":
     start_client()
