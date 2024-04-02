@@ -6,7 +6,7 @@ function App() {
 
   const fetchProducts = async () => {
     const { data } = await Axios.get(
-      "http://localhost:8000/items/"
+      "http://localhost:3001/items/"
     );
     const products = data;
     setProducts(products);
