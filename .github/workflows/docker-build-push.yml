@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write_package
+      packages: write
       id-token: write
 
     steps:
