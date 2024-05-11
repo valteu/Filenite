@@ -24,7 +24,9 @@ jobs:
       with:
         context: .
         push: true
-        tags: docker1:latest
+        tags: ${{ secrets.DOCKER_HUB_USERNAME }}$/docker1:latest
+
+
 
     - name: Deploy to Raspberry Pi
       uses: appleboy/ssh-action@master
