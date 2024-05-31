@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import pb from '../../pocketbase/pocketbase';
+import pb from '../pocketbase/pocketbase';
 
 
 const FileUpload = () => {

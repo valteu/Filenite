@@ -4,7 +4,6 @@ import SignupRoute from './routes/SignupRoute';
 import LoginRoute from './routes/LoginRoute';
 import UploadRoute from './routes/UploadRoute';
 import FilesRoute from './routes/FilesRoute';
-import { isUserValid } from './pocketbase/pocketbase';
 import ProtectedRoute from './ProtectedRoute'
 const App = () => {
   return (
