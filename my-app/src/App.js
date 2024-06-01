@@ -14,7 +14,7 @@ const App = () => {
         <Route path="/upload" element={<ProtectedRoute element = {<UploadRoute />}/>} />
         <Route path="/files" element={<ProtectedRoute element = {<FilesRoute />}/>} />
         <Route path="/" element={<ProtectedRoute element = {<FilesRoute />}/>} />
-        <Route path="*" element={<Navigate to = "login"/>}/>
+        <Route path="*" element={<Navigate to = "files"/>}/>
       </Routes>
     </Router>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import pb from '../pocketbase/pocketbase';
+import pb, { fetchProtectedFile } from '../pocketbase/pocketbase';
 
 const FileList = () => {
     
@@ -8,7 +8,6 @@ const FileList = () => {
 
   useEffect(() => {
     const fetchFiles = async () => {
-      const userId = pb.authStore.model.id;
       const result = await pb.collection('files').getFullList({});
       setFiles(result);
     };
@@ -17,9 +16,12 @@ const FileList = () => {
   }, []);
 
   
-
+  const handleClick = (url) => {
+    console.log('Button was pressed!');
+    fetchProtectedFile(url);
+  };
   const getUrl = (file) =>{
-    let url = pb.files.getUrl(file, file.file, pb.files.getToken);
+    let url = pb.files.getUrl(file, file.file, {'token': pb.files.getToken});
     url += '?download=1';
     return url;
   }
@@ -30,12 +32,9 @@ const FileList = () => {
       <ul>
         {files.map((file) => (
           <li key={file.id}>
-            <a 
-                href= {getUrl(file)} //append ?download=1 here to automatically download instead of previewing
-                download={file.file}
-            >
-                {file.file}
-            </a>
+            <div>
+      <       button onClick={() => handleClick(getUrl(file))}>Press me</button>
+            </div>
           </li>
         ))}
       </ul>
