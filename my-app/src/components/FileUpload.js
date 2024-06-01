@@ -14,6 +14,7 @@ const FileUpload = () => {
     if (file) {
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('name', file.name);
       formData.append('user', pb.authStore.model.id);
 
       try {

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import pb, { fetchProtectedFile } from '../pocketbase/pocketbase';
+import pb, { fetchProtectedFile, shareFileWithUser } from '../pocketbase/pocketbase';
 
 const FileList = () => {
     
-    const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState([]);
   
 
   useEffect(() => {
@@ -24,6 +24,9 @@ const FileList = () => {
     url += '?download=1';
     return url;
   }
+  const handleUserAdd = (fileId, userId) => {
+    shareFileWithUser(fileId, userId);
+  };
 
   return (
     <div>
@@ -32,7 +35,8 @@ const FileList = () => {
         {files.map((file) => (
           <li key={file.id}>
             <div>
-      <       button onClick={() => handleClick(getUrl(file))}>{file.file}</button>
+              <button onClick={() => handleClick(getUrl(file))}>{file.name}</button>
+              <button onClick={() => handleUserAdd (file.id, "sp5xggk4o58brte")}>addUser</button>
             </div>
           </li>
         ))}
