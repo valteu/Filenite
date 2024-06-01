@@ -17,7 +17,6 @@ const FileList = () => {
 
   
   const handleClick = (url) => {
-    console.log('Button was pressed!');
     fetchProtectedFile(url);
   };
   const getUrl = (file) =>{
@@ -33,7 +32,7 @@ const FileList = () => {
         {files.map((file) => (
           <li key={file.id}>
             <div>
-      <       button onClick={() => handleClick(getUrl(file))}>Press me</button>
+      <       button onClick={() => handleClick(getUrl(file))}>{file.file}</button>
             </div>
           </li>
         ))}
