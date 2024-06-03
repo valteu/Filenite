@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import pb from '../pocketbase/pocketbase';
+import pb, {uploadFile} from '../pocketbase/pocketbase';
 
 
 const FileUpload = () => {
@@ -18,10 +18,11 @@ const FileUpload = () => {
       formData.append('user', pb.authStore.model.id);
 
       try {
-        await pb.collection('files').create(formData);
+        await uploadFile(formData);
         alert('File uploaded successfully');
+        
       } catch (error) {
-        alert('File upload failed');
+        alert('File upload failed' + error.message);
       }
     }
   };

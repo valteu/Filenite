@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import pb, { shareFileWithUser } from '../pocketbase/pocketbase';
+import pb, { shareFileWithUser, deleteFile } from '../pocketbase/pocketbase';
 
 const FileList = () => {
     
@@ -18,7 +18,7 @@ const FileList = () => {
   
   const getUrl = (file) =>{
     let url = pb.files.getUrl(file, file.file); //{'token': pb.files.getToken}
-    //url += '?download=1';
+    url += '?download=1';
     return url;
   }
 
@@ -26,9 +26,19 @@ const FileList = () => {
     try {
       await shareFileWithUser(fileId, userId);
     } catch (error) {
-      setError(error.message);
+      alert(error.message);
     }
   };
+
+  const handleFileDeletion = async(fileId) => {
+    try {
+      await deleteFile(fileId);
+      window.location.reload();
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
 
   const isImage = (fileName) => {
     const extension = fileName.split('.').pop().toLowerCase();
@@ -48,9 +58,10 @@ const FileList = () => {
                   href= {getUrl(file)} //append ?download=1 here to automatically download instead of previewing
                   download={file.file}
                 >
-                  {file.name}
+                  {"Download: " + file.name}
                 </a>
                 <button onClick={() => handleUserAdd(file.id, "sp5xggk4o58brte")}>addUser</button>
+                <button on onClick={() => handleFileDeletion(file.id)}>delete file</button>
               </div>
             </div>
           </li>
