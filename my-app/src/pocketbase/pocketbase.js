@@ -53,6 +53,9 @@ export function logout() {
         const record = await pb.collection('files').getOne(recordId);
         console.log(record);
         const sharedUsers = record.sharedUsers;
+        if(record.user == user) {
+          throw new Error("You can't share files with yourself"); 
+        }
         if (!sharedUsers.includes(user)) {
             sharedUsers.push(user);
         }
@@ -61,9 +64,9 @@ export function logout() {
             "sharedUsers": sharedUsers
         };
         const updatedRecord = await pb.collection('files').update(record.id, data);
-      console.log('Record updated successfully', updatedRecord);
+        alert('File shared');
     } catch (error) {
-      console.error('Failed to update record', error);
+      throw error;
     }
   }
   

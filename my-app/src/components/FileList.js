@@ -4,7 +4,7 @@ import pb, { shareFileWithUser } from '../pocketbase/pocketbase';
 const FileList = () => {
     
   const [files, setFiles] = useState([]);
-  
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -21,8 +21,13 @@ const FileList = () => {
     //url += '?download=1';
     return url;
   }
-  const handleUserAdd = (fileId, userId) => {
-    shareFileWithUser(fileId, userId);
+
+  const handleUserAdd = async(fileId, userId) => {
+    try {
+      await shareFileWithUser(fileId, userId);
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -38,11 +43,12 @@ const FileList = () => {
             >
                 {file.name}
             </a>
-              <button onClick={() => handleUserAdd (file.id, "sp5xggk4o58brte")}>addUser</button>
+              <button onClick={() => handleUserAdd(file.id, "sp5xggk4o58brte")}>addUser</button>
             </div>
           </li>
         ))}
       </ul>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 };
