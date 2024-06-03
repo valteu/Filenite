@@ -16,7 +16,7 @@ export async function addUser(email, password) {
         }
         const authData = await pb.collection('users').create(data);
         //await pb.collection('users').requestVerification(email);
-        window.location.reload();
+        //window.location.reload();
         return authData;
     } catch (error) {
         throw error;
@@ -30,7 +30,7 @@ export async function login(email, password) {
         const isUserVerified=pb.authStore.model.verified;
         if(!isUserVerified){
             pb.authStore.clear();
-            throw new Error("Your account is not verified");
+            throw new Error("Your account is not verified. Please check your emails for the verification link.");
         }
         
         window.location.reload();
@@ -47,33 +47,6 @@ export function logout() {
         throw error;
     }
 }
-
-export async function fetchProtectedFile(fileUrl) {
-    const token = pb.authStore.token;
-    console.log(token);
-    if (!token) {
-      throw new Error('User is not authenticated');
-    }
-  
-    try {
-        const response = await axios.get(fileUrl, {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            },
-            responseType: 'blob' // To handle binary data
-      });
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok ' + response.statusText);
-      }
-  
-      const fileBlob = await response.blob();
-      // Do something with the file blob, e.g., display or download it
-      console.log('File fetched successfully', fileBlob);
-    } catch (error) {
-      console.error('Failed to fetch the file', error);
-    }
-  }
 
   export async function shareFileWithUser(recordId, user) {
     try {

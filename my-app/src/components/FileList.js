@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import pb, { fetchProtectedFile, shareFileWithUser } from '../pocketbase/pocketbase';
+import pb, { shareFileWithUser } from '../pocketbase/pocketbase';
 
 const FileList = () => {
     
@@ -16,12 +16,9 @@ const FileList = () => {
   }, []);
 
   
-  const handleClick = (url) => {
-    fetchProtectedFile(url);
-  };
   const getUrl = (file) =>{
-    let url = pb.files.getUrl(file, file.file, {'token': pb.files.getToken});
-    url += '?download=1';
+    let url = pb.files.getUrl(file, file.file); //{'token': pb.files.getToken}
+    //url += '?download=1';
     return url;
   }
   const handleUserAdd = (fileId, userId) => {
@@ -35,7 +32,12 @@ const FileList = () => {
         {files.map((file) => (
           <li key={file.id}>
             <div>
-              <button onClick={() => handleClick(getUrl(file))}>{file.name}</button>
+            <a 
+                href= {getUrl(file)} //append ?download=1 here to automatically download instead of previewing
+                download={file.file}
+            >
+                {file.name}
+            </a>
               <button onClick={() => handleUserAdd (file.id, "sp5xggk4o58brte")}>addUser</button>
             </div>
           </li>
