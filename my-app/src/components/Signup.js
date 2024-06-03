@@ -22,27 +22,23 @@ const Signup = () => {
     };
   
     return (
-      <div>
+      <div className="login">
         <h1>Sign Up</h1>
         <form onSubmit={handleSignup}>
-          <div>
-            <label>Email:</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              placeholder="E-Mail" 
             />
-          </div>
-          <div>
-            <label>Password:</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              placeholder="Password" 
             />
-          </div>
           <button type="submit">Sign Up</button>
         </form>
         {error && <p style={{ color: 'red' }}>{error}</p>}

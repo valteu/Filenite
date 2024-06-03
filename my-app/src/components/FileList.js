@@ -30,20 +30,28 @@ const FileList = () => {
     }
   };
 
+  const isImage = (fileName) => {
+    const extension = fileName.split('.').pop().toLowerCase();
+    return ['jpg', 'jpeg', 'png'].includes(extension);
+  };
+
   return (
     <div>
       <h2>My Files</h2>
-      <ul>
+      <ul className="file-list">
         {files.map((file) => (
           <li key={file.id}>
-            <div>
-            <a 
-                href= {getUrl(file)} //append ?download=1 here to automatically download instead of previewing
-                download={file.file}
-            >
-                {file.name}
-            </a>
-              <button onClick={() => handleUserAdd(file.id, "sp5xggk4o58brte")}>addUser</button>
+            <div className="file">
+              {isImage(file.file) && <img className="file-list-img" src={getUrl(file)} alt={file.name} />}
+              <div className="file-description">
+                <a 
+                  href= {getUrl(file)} //append ?download=1 here to automatically download instead of previewing
+                  download={file.file}
+                >
+                  {file.name}
+                </a>
+                <button onClick={() => handleUserAdd(file.id, "sp5xggk4o58brte")}>addUser</button>
+              </div>
             </div>
           </li>
         ))}
