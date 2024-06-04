@@ -48,6 +48,34 @@ export function logout() {
     }
 }
 
+export async function getOwnFileList() {
+  try {
+    const id = pb.authStore.model.id;
+    const filterArgument =  `"${id}" = user.id`;
+    const list = await pb.collection('files').getFullList({
+      filter: filterArgument,
+      sort: '-updated',
+    });
+    return list;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getSharedFileList() {
+  try {
+    const id = pb.authStore.model.id;
+    const filterArgument =  `"${id}" ?= sharedUsers.id`;
+    const list = await pb.collection('files').getFullList({
+      filter: filterArgument,
+      sort: '-updated',
+    });
+    return list;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function uploadFile(formData) {
   try {
     await pb.collection('files').create(formData);
@@ -64,17 +92,19 @@ export async function deleteFile(recordId) {
   }
 }
 
-export async function shareFileWithUser(recordId, user) {
+export async function shareFileWithUser(recordId, userId) {
   try {
+      if(userId == '') {
+        throw new Error("Please enter an email adress.");
+      }
       const record = await pb.collection('files').getOne(recordId);
       const sharedUsers = record.sharedUsers;
-      if(record.user == user) {
+      if(record.user == userId) {
         throw new Error("You can't share files with yourself"); 
       }
-      if (!sharedUsers.includes(user)) {
-          sharedUsers.push(user);
+      if (!sharedUsers.includes(userId)) {
+          sharedUsers.push(userId);
       }
-      console.log(sharedUsers);
       const data = {
           "sharedUsers": sharedUsers
       };

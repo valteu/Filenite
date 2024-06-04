@@ -1,20 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import pb, { shareFileWithUser, deleteFile } from '../pocketbase/pocketbase';
+import pb, { shareFileWithUser, deleteFile, getOwnFileList, getSharedFileList } from '../pocketbase/pocketbase';
 
 const FileList = () => {
     
-  const [files, setFiles] = useState([]);
+  const [ownFiles, setOwnFiles] = useState([]);
+  const [sharedFiles, setSharedFiles] = useState([]);
+  const [fileId, setFileId] = useState('');
+  const [userId, setUserId] = useState('');
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchFiles = async () => {
-      const result = await pb.collection('files').getFullList({});
-      setFiles(result);
+      const result = await getOwnFileList();
+      setOwnFiles(result);
     };
 
     fetchFiles();
   }, []);
+  
+  useEffect(() => {
+    const fetchFiles = async () => {
+      const result = await getSharedFileList();
+      setSharedFiles(result);
+    };
 
+    fetchFiles();
+  }, []);
   
   const getUrl = (file) =>{
     let url = pb.files.getUrl(file, file.file); //{'token': pb.files.getToken}
@@ -22,7 +33,8 @@ const FileList = () => {
     return url;
   }
 
-  const handleUserAdd = async(fileId, userId) => {
+  const handleFileShare = async(e) => {
+    e.preventDefault();
     try {
       await shareFileWithUser(fileId, userId);
     } catch (error) {
@@ -33,9 +45,8 @@ const FileList = () => {
   const handleFileDeletion = async(fileId) => {
     try {
       await deleteFile(fileId);
-      window.location.reload();
     } catch (error) {
-      alert(error.message);
+      setError(error.message);
     }
   };
 
@@ -49,19 +60,40 @@ const FileList = () => {
     <div>
       <h2>My Files</h2>
       <ul className="file-list">
-        {files.map((file) => (
+        {ownFiles.map((file) => (
           <li key={file.id}>
             <div className="file">
               {isImage(file.file) && <img className="file-list-img" src={getUrl(file)} alt={file.name} />}
               <div className="file-description">
                 <a 
-                  href= {getUrl(file)} //append ?download=1 here to automatically download instead of previewing
+                  href= {getUrl(file)} 
                   download={file.file}
                 >
                   {"Download: " + file.name}
                 </a>
-                <button onClick={() => handleUserAdd(file.id, "sp5xggk4o58brte")}>addUser</button>
-                <button on onClick={() => handleFileDeletion(file.id)}>delete file</button>
+                <form onSubmit={handleFileShare}>
+                  <input type="id" value={userId} onChange={(e) => {setUserId(e.target.value); setFileId(file.id)}} placeholder="UserId to share with" />
+                  <button type="submit">share file</button>
+                </form>
+                <button onClick={() => handleFileDeletion(file.id)}>delete file</button>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <h2>Shared Files</h2>
+      <ul className="file-list">
+        {sharedFiles.map((file) => (
+          <li key={file.id}>
+            <div className="file">
+              {isImage(file.file) && <img className="file-list-img" src={getUrl(file)} alt={file.name} />}
+              <div className="file-description">
+                <a 
+                  href= {getUrl(file)} 
+                  download={file.file}
+                >
+                  {"Download: " + file.name}
+                </a>
               </div>
             </div>
           </li>

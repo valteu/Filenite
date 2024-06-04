@@ -19,7 +19,6 @@ const FileUpload = () => {
 
       try {
         await uploadFile(formData);
-        alert('File uploaded successfully');
         
       } catch (error) {
         alert('File upload failed' + error.message);
