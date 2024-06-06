@@ -1,1 +1,4 @@
 pocketbase/pb_data/
+my-app/.env
+pocketbase/pb_data/data.db
+pocketbase/pb_data/logs.db
