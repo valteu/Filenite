@@ -7,8 +7,6 @@ import pb from '../pocketbase/pocketbase'
 const FilesRoute = () => {
   pb.collection('files').subscribe('*', function (e) {
     window.location.reload();
-    console.log(e.action);
-    console.log(e.record);
   }, { /* other options like expand, custom headers, etc.  */});
   return (
   <div>

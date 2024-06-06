@@ -1,6 +1,6 @@
-import PocketBase from 'pocketbase';
+import PocketBase, { LocalAuthStore } from 'pocketbase';
 import axios from 'axios';
-const pb = new PocketBase(process.env.REACT_APP_POCKETBASE_URL)
+const pb = new PocketBase(process.env.REACT_APP_POCKETBASE_URL, new LocalAuthStore("user"));
 
 pb.autoCancellation(false);
 

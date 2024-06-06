@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import pb, { shareFileWithUser, deleteFile, getOwnFileList, getSharedFileList } from '../pocketbase/pocketbase';
+import { mapToUserId } from '../pocketbase/adminClient';
 
 const FileList = () => {
     
   const [ownFiles, setOwnFiles] = useState([]);
   const [sharedFiles, setSharedFiles] = useState([]);
   const [fileId, setFileId] = useState('');
-  const [userId, setUserId] = useState('');
+  const [email, setEmail] = useState('');
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -36,6 +37,7 @@ const FileList = () => {
   const handleFileShare = async(e) => {
     e.preventDefault();
     try {
+      const userId = await mapToUserId(email);
       await shareFileWithUser(fileId, userId);
     } catch (error) {
       alert(error.message);
@@ -72,7 +74,7 @@ const FileList = () => {
                   {"Download: " + file.name}
                 </a>
                 <form onSubmit={handleFileShare}>
-                  <input type="id" value={userId} onChange={(e) => {setUserId(e.target.value); setFileId(file.id)}} placeholder="UserId to share with" />
+                  <input type="id" value={email} onChange={(e) => {setEmail(e.target.value); setFileId(file.id)}} placeholder="Enter email of user" />
                   <button type="submit">share file</button>
                 </form>
                 <button onClick={() => handleFileDeletion(file.id)}>delete file</button>
