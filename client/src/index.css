@@ -66,3 +66,51 @@ button, .file-upload input {
   height: 300px;
   border-radius: 5px;
 }
+
+.file {
+  border: 1px solid #ccc;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.file-list-img {
+  max-width: 100%;
+  height: auto;
+}
+
+.file-name-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.menu-options {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-options form {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-options input {
+  margin-bottom: 5px;
+}
+
+.file-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.file-description {
+  margin-top: 10px;
+}

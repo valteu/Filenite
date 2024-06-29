@@ -1,0 +1,21 @@
+.file-menu-popup {
+  position: absolute;
+  top: 100%; /* Position below the file preview */
+  left: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}

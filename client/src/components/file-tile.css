@@ -1,0 +1,44 @@
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.file-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  width: 200px;
+  height: 300px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.file-preview {
+  width: 100%;
+  height: 70%;
+  object-fit: cover;
+  margin-bottom: 8px;
+}
+
+.file-name-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.menu-button {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.file-description {
+  margin-top: 10px;
+}
