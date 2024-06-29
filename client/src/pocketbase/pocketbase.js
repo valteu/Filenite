@@ -1,11 +1,11 @@
 import PocketBase, { LocalAuthStore } from 'pocketbase';
-import axios from 'axios';
+
 const pb = new PocketBase(process.env.REACT_APP_POCKETBASE_URL, new LocalAuthStore("user"));
 
 pb.autoCancellation(false);
 
 export default pb;
-export const isUserValid=pb.authStore.isValid;
+export const isUserValid = pb.authStore.isValid;
 
 export async function addUser(email, password) {
     try{
@@ -14,10 +14,9 @@ export async function addUser(email, password) {
             password,
             passwordConfirm: password,
         }
-        const authData = await pb.collection('users').create(data);
+        await pb.collection('users').create(data);
         //await pb.collection('users').requestVerification(email);
         //window.location.reload();
-        return authData;
     } catch (error) {
         throw error;
     }
@@ -25,9 +24,8 @@ export async function addUser(email, password) {
 
 export async function login(email, password) {
     try{
-        
-        const authData = await pb.collection('users').authWithPassword(email, password);
-        const isUserVerified=pb.authStore.model.verified;
+        await pb.collection('users').authWithPassword(email, password);
+        const isUserVerified = pb.authStore.model.verified;
         if(!isUserVerified){
             pb.authStore.clear();
             throw new Error("Your account is not verified. Please check your emails for the verification link.");
@@ -51,7 +49,7 @@ export function logout() {
 export async function getOwnFileList() {
   try {
     const id = pb.authStore.model.id;
-    const filterArgument =  `"${id}" = user.id`;
+    const filterArgument = `"${id}" = user.id`;
     const list = await pb.collection('files').getFullList({
       filter: filterArgument,
       sort: '-updated',
@@ -65,7 +63,7 @@ export async function getOwnFileList() {
 export async function getSharedFileList() {
   try {
     const id = pb.authStore.model.id;
-    const filterArgument =  `"${id}" ?= sharedUsers.id`;
+    const filterArgument = `"${id}" ?= sharedUsers.id`;
     const list = await pb.collection('files').getFullList({
       filter: filterArgument,
       sort: '-updated',
@@ -94,12 +92,12 @@ export async function deleteFile(recordId) {
 
 export async function shareFileWithUser(recordId, userId) {
   try {
-      if(userId == '') {
+      if(userId === '') {
         throw new Error("Please enter an email adress.");
       }
       const record = await pb.collection('files').getOne(recordId);
       const sharedUsers = record.sharedUsers;
-      if(record.user == userId) {
+      if(record.user === userId) {
         throw new Error("You can't share files with yourself"); 
       }
       if (!sharedUsers.includes(userId)) {
@@ -108,8 +106,7 @@ export async function shareFileWithUser(recordId, userId) {
       const data = {
           "sharedUsers": sharedUsers
       };
-      const updatedRecord = await pb.collection('files').update(record.id, data);
-      alert('File shared');
+      await pb.collection('files').update(record.id, data);
   } catch (error) {
     throw error;
   }

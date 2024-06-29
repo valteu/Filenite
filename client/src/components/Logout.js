@@ -1,5 +1,5 @@
 import React from "react";
-import pb, { logout } from '../pocketbase/pocketbase';
+import { logout } from '../pocketbase/pocketbase';
 
 const Logout = () => {
     return (
