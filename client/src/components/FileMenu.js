@@ -1,11 +1,28 @@
-import React, { useState } from 'react';
-import { shareFileWithUser, deleteFile } from '../pocketbase/pocketbase';
+import React, { useState, useEffect } from 'react';
+import pb, { shareFileWithUser, deleteFile } from '../pocketbase/pocketbase';
 import { mapToUserId } from '../pocketbase/adminClient';
 import './fileMenu.css';
 
 const FileMenu = ({ file, onFileDelete, onClose }) => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState(null);
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    const generateToken = async () => {
+      const token = await pb.files.getToken();
+      setToken(token);
+    };
+
+    generateToken();
+  }, []);
+
+  const getUrl = (file) =>{
+    let url = pb.files.getUrl(file, file.file, {token}); //{'token': pb.files.getToken}
+    //url += '?download=1';
+    return url;
+  }
+
 
   const handleFileShare = async (e) => {
     e.preventDefault();
@@ -32,6 +49,12 @@ const FileMenu = ({ file, onFileDelete, onClose }) => {
   return (
     <div className="file-menu-popup">
       <button className="close-button" onClick={onClose}>X</button>
+      <a 
+        href = {getUrl(file)} 
+        download={file.file}
+      >
+        {"Download: " + file.name} 
+      </a>
       <form onSubmit={handleFileShare}>
         <input
           type="email"
