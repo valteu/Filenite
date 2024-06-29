@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import pb, {addUser} from '../pocketbase/pocketbase';
+import {addUser} from '../pocketbase/pocketbase';
 
 const Signup = () => {
     const [email, setEmail] = useState('');
@@ -13,7 +13,7 @@ const Signup = () => {
       setSuccess(false);
   
       try {
-        const authData = await addUser(email, password);
+        await addUser(email, password);
 
         setSuccess(true);
       } catch (err) {
