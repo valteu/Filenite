@@ -1,0 +1,14 @@
+services:
+  client:
+    build: ./client/
+    ports:
+      - 3000:3000
+  pocketbase:
+    build: ./pocketbase/
+    ports:
+      - 8090:8090
+    volumes:
+      - pocketbase_data:/pocketbase/pb_data
+volumes:
+  pocketbase_data:
+    external: true
