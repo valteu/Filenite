@@ -45,8 +45,18 @@ const FileList = () => {
   return (
     <div>
       <div className="tabs">
-        <button onClick={() => setActiveTab('own')} className={activeTab === 'own' ? 'active' : ''}>My Files</button>
-        <button onClick={() => setActiveTab('shared')} className={activeTab === 'shared' ? 'active' : ''}>Shared Files</button>
+        <button 
+          onClick={() => setActiveTab('own')} 
+          className={activeTab === 'own' ? 'active' : ''}
+        >
+          My Files
+        </button>
+        <button 
+          onClick={() => setActiveTab('shared')} 
+          className={activeTab === 'shared' ? 'active' : ''}
+        >
+          Shared Files
+        </button>
       </div>
       {activeTab === 'own' && (
         <>
