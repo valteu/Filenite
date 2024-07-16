@@ -8,7 +8,7 @@ import './styles.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL}/pdf.worker.min.js`;
 
-const File = ({ file, onFileDelete }) => {
+const File = ({ file, onFileDelete, isShared }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [token, setToken] = useState(false);
   useEffect(() => {
@@ -20,11 +20,11 @@ const File = ({ file, onFileDelete }) => {
       generateToken();
     }, []);
 
-    const getUrl = (file) =>{
-      let url = pb.files.getUrl(file, file.file, {token}); //{'token': pb.files.getToken}
-      //url += '?download=1';
-      return url;
-    }
+  const getUrl = (file) =>{
+    let url = pb.files.getUrl(file, file.file, {token}); //{'token': pb.files.getToken}
+    //url += '?download=1';
+    return url;
+  }
 
   const isImage = (fileName) => {
     const extension = fileName.split('.').pop().toLowerCase();
@@ -41,16 +41,6 @@ const File = ({ file, onFileDelete }) => {
     return ['mp3', 'wav', 'ogg'].includes(extension);
   };
 
-  const isPDF = (fileName) => {
-    const extension = fileName.split('.').pop().toLowerCase();
-    return extension === 'pdf';
-  };
-
-  const isText = (fileName) => {
-    const extension = fileName.split('.').pop().toLowerCase();
-    return ['txt', 'md'].includes(extension);
-  };
-
   const renderPreview = (file) => {
     const url = getUrl(file);
 
@@ -60,14 +50,6 @@ const File = ({ file, onFileDelete }) => {
       return <ReactPlayer url={url} controls width="100%" height="100%" />;
     } else if (isAudio(file.file)) {
       return <audio controls src={url} />;
-    } else if (isPDF(file.file)) {
-      return (
-        <Document file={url} onLoadError={console.error} onSourceError={console.error}>
-          <Page pageNumber={1} />
-        </Document>
-      );
-    } else if (isText(file.file)) {
-      return <iframe src={url} title={file.name} width="100%" height="100%"></iframe>;
     } else {
       return <img className="file-preview" src={defaultFileIcon} alt="File icon" />;
     }
@@ -85,9 +67,16 @@ const File = ({ file, onFileDelete }) => {
     <div className="file-tile">
       {renderPreview(file)}
       <div className="file-name-menu">
-        <span>{file.name}</span>
+        <span className='file-title'>{file.name}</span>
         <button onClick={toggleMenu} className="menu-button">⋮</button>
-        {menuOpen && <FileMenu file={file} onFileDelete={onFileDelete} onClose={closeMenu} />}
+        {menuOpen && (
+          <FileMenu 
+            file={file} 
+            onFileDelete={onFileDelete} 
+            onClose={closeMenu} 
+            isShared={isShared}
+          />
+        )}
       </div>
     </div>
   );

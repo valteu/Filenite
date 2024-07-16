@@ -7,9 +7,10 @@ const FileList = () => {
   const [ownFiles, setOwnFiles] = useState([]);
   const [sharedFiles, setSharedFiles] = useState([]);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('own'); // State to manage active tab
 
   useEffect(() => {
-    const fetchFiles = async () => {
+    const fetchOwnFiles = async () => {
       try {
         const result = await getOwnFileList();
         setOwnFiles(result);
@@ -19,11 +20,11 @@ const FileList = () => {
       }
     };
 
-    fetchFiles();
+    fetchOwnFiles();
   }, []);
   
   useEffect(() => {
-    const fetchFiles = async () => {
+    const fetchSharedFiles = async () => {
       try {
         const result = await getSharedFileList();
         setSharedFiles(result);
@@ -33,7 +34,7 @@ const FileList = () => {
       }
     };
 
-    fetchFiles();
+    fetchSharedFiles();
   }, []);
 
   const handleFileDelete = (fileId) => {
@@ -43,18 +44,30 @@ const FileList = () => {
 
   return (
     <div>
-      <h2>My Files</h2>
-      <div className="file-grid">
-        {ownFiles.map((file) => (
-          <File key={file.id} file={file} onFileDelete={handleFileDelete} />
-        ))}
+      <div className="tabs">
+        <button onClick={() => setActiveTab('own')} className={activeTab === 'own' ? 'active' : ''}>My Files</button>
+        <button onClick={() => setActiveTab('shared')} className={activeTab === 'shared' ? 'active' : ''}>Shared Files</button>
       </div>
-      <h2>Shared Files</h2>
-      <div className="file-grid">
-        {sharedFiles.map((file) => (
-          <File key={file.id} file={file} onFileDelete={handleFileDelete} />
-        ))}
-      </div>
+      {activeTab === 'own' && (
+        <>
+          <h2>My Files</h2>
+          <div className="file-grid">
+            {ownFiles.map((file) => (
+              <File key={file.id} file={file} onFileDelete={handleFileDelete} />
+            ))}
+          </div>
+        </>
+      )}
+      {activeTab === 'shared' && (
+        <>
+          <h2>Shared Files</h2>
+          <div className="file-grid">
+            {sharedFiles.map((file) => (
+              <File key={file.id} file={file} onFileDelete={handleFileDelete} isShared />
+            ))}
+          </div>
+        </>
+      )}
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );

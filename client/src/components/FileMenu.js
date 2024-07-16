@@ -3,12 +3,12 @@ import pb, { shareFileWithUser, deleteFile } from '../pocketbase/pocketbase';
 import { mapToUserId } from '../pocketbase/adminClient';
 import './fileMenu.css';
 
-const FileMenu = ({ file, onFileDelete, onClose }) => {
+const FileMenu = ({ file, onFileDelete, onClose, isShared }) => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState(null);
   const [token, setToken] = useState('');
-  const menuRef = useRef(null); // Reference to the file menu
 
+const menuRef = useRef(null);
   useEffect(() => {
     const generateToken = async () => {
       const token = await pb.files.getToken();
@@ -17,6 +17,11 @@ const FileMenu = ({ file, onFileDelete, onClose }) => {
 
     generateToken();
   }, []);
+
+  const getUrl = (file) => {
+    let url = pb.files.getUrl(file, file.file, { token });
+    return url;
+  };
 
   useEffect(() => {
     // Function to handle clicks outside of the menu
@@ -33,11 +38,6 @@ const FileMenu = ({ file, onFileDelete, onClose }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [onClose]);
-
-  const getUrl = (file) => {
-    let url = pb.files.getUrl(file, file.file, { token });
-    return url;
-  };
 
   const handleDownload = () => {
     const url = getUrl(file);
@@ -75,7 +75,7 @@ const FileMenu = ({ file, onFileDelete, onClose }) => {
     <div className="file-menu-popup" ref={menuRef}>
       <button className="close-button" onClick={onClose}>X</button>
       <button onClick={handleDownload}>
-        {"Download: " + file.name}
+        {"Download File"}
       </button>
       <form onSubmit={handleFileShare}>
         <input
@@ -86,7 +86,9 @@ const FileMenu = ({ file, onFileDelete, onClose }) => {
         />
         <button type="submit">Share</button>
       </form>
-      <button onClick={handleFileDeletion}>Delete</button>
+      {!isShared && (
+        <button onClick={handleFileDeletion}>Delete</button>
+      )}
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );

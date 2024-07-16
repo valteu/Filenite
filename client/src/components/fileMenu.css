@@ -40,3 +40,9 @@
 .file-menu-popup button {
   margin-left: 0;
 }
+
+.file-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
