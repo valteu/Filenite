@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import pb from '../pocketbase/pocketbase';
 import ReactPlayer from 'react-player';
 import { Document, Page, pdfjs } from 'react-pdf';
@@ -10,12 +10,21 @@ pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL}/pdf.worker.min.
 
 const File = ({ file, onFileDelete }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [token, setToken] = useState(false);
+  useEffect(() => {
+      const generateToken = async () => {
+        const token = await pb.files.getToken();
+        setToken(token);
+      };
 
-  const getUrl = (file) => {
-    let url = pb.files.getUrl(file, file.file);
-    url += '?download=1';
-    return url;
-  }
+      generateToken();
+    }, []);
+
+    const getUrl = (file) =>{
+      let url = pb.files.getUrl(file, file.file, {token}); //{'token': pb.files.getToken}
+      //url += '?download=1';
+      return url;
+    }
 
   const isImage = (fileName) => {
     const extension = fileName.split('.').pop().toLowerCase();

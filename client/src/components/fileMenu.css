@@ -1,6 +1,6 @@
 .file-menu-popup {
   position: absolute;
-  top: 100%; /* Position below the file preview */
+  top: 100%;
   left: 0;
   background: #fff;
   border: 1px solid #ccc;
@@ -12,10 +12,31 @@
 
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 0px;
+  right: 0px;
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1rem;
   cursor: pointer;
+}
+
+.file-menu-popup form {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.file-menu-popup form input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.file-menu-popup form button {
+  margin: 0;
+  margin-left: 8px;
+  cursor: pointer;
+} 
+
+.file-menu-popup button {
+  margin-left: 0;
 }

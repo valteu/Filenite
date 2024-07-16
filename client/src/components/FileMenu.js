@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import pb, { shareFileWithUser, deleteFile } from '../pocketbase/pocketbase';
 import { mapToUserId } from '../pocketbase/adminClient';
 import './fileMenu.css';
@@ -7,6 +7,7 @@ const FileMenu = ({ file, onFileDelete, onClose }) => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState(null);
   const [token, setToken] = useState('');
+  const menuRef = useRef(null); // Reference to the file menu
 
   useEffect(() => {
     const generateToken = async () => {
@@ -17,12 +18,36 @@ const FileMenu = ({ file, onFileDelete, onClose }) => {
     generateToken();
   }, []);
 
-  const getUrl = (file) =>{
-    let url = pb.files.getUrl(file, file.file, {token}); //{'token': pb.files.getToken}
-    //url += '?download=1';
-    return url;
-  }
+  useEffect(() => {
+    // Function to handle clicks outside of the menu
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
 
+    // Add event listener for clicks
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      // Remove event listener when component unmounts
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose]);
+
+  const getUrl = (file) => {
+    let url = pb.files.getUrl(file, file.file, { token });
+    return url;
+  };
+
+  const handleDownload = () => {
+    const url = getUrl(file);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = file.file;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
+  };
 
   const handleFileShare = async (e) => {
     e.preventDefault();
@@ -47,14 +72,11 @@ const FileMenu = ({ file, onFileDelete, onClose }) => {
   };
 
   return (
-    <div className="file-menu-popup">
+    <div className="file-menu-popup" ref={menuRef}>
       <button className="close-button" onClick={onClose}>X</button>
-      <a 
-        href = {getUrl(file)} 
-        download={file.file}
-      >
-        {"Download: " + file.name} 
-      </a>
+      <button onClick={handleDownload}>
+        {"Download: " + file.name}
+      </button>
       <form onSubmit={handleFileShare}>
         <input
           type="email"
