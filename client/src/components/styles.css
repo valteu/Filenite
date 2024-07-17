@@ -79,3 +79,11 @@
 .tabs button:not(.active) {
   color: var(--accent-color);
 }
+
+.title {
+  font-family: Arial, sans-serif;
+  font-size: 48px;
+  color: black;
+  text-align: center;
+  margin-top: 50px;
+}
