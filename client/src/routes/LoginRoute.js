@@ -10,6 +10,7 @@ const LoginRoute = () => {
     }
     return (
         <div>
+            <h1 class="title">Welcome to Filenite</h1>
             <Login />
             <Signup />
         </div>
